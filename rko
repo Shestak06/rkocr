@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ПартнёрРКО — зарабатывай на каждом клиенте</title>
+<meta name="description" content="Партнёрская программа РКО. Приводи бизнес в банки-партнёры и получай до 8000 ₽ за каждого клиента. Без потолка, без бюрократии.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --c-bg:          #0A0A0A;
+  --c-surface:     #111111;
+  --c-surface-2:   #161616;
+  --c-border:      rgba(255,255,255,0.07);
+  --c-border-md:   rgba(255,255,255,0.13);
+  --c-border-hi:   rgba(255,255,255,0.2);
+  --c-text:        #F0EDE8;
+  --c-muted:       #6E6B67;
+  --c-muted-hi:    #9C9993;
+  --c-accent:      #C8FF00;
+  --c-accent-dim:  rgba(200,255,0,0.10);
+  --c-accent-glow: rgba(200,255,0,0.25);
+  --c-ink:         #0A0A0A;
+  --ff:            'Onest', sans-serif;
+  --ff-mono:       'JetBrains Mono', monospace;
+  --radius:        12px;
+  --radius-lg:     20px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: var(--ff);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--ff); cursor: pointer; }
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+.container { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+
+.mono {
+  font-family: var(--ff-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.section-label { margin-bottom: 18px; }
+
+.section-title {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+
+.section-sub {
+  font-size: 18px;
+  color: var(--c-muted-hi);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1),
+              transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 64px;
+  display: flex; align-items: center;
+  background: rgba(10,10,10,0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+  transition: background 0.3s;
+}
+.nav-inner {
+  width: 100%; max-width: 1120px; margin: 0 auto;
+  padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  font-size: 17px; font-weight: 900; letter-spacing: -0.04em;
+  display: flex; align-items: center; gap: 2px;
+}
+.nav-logo em { font-style: normal; color: var(--c-accent); }
+.nav-links {
+  display: flex; gap: 36px; align-items: center;
+}
+.nav-links a {
+  font-size: 14px; color: var(--c-muted);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--c-text); }
+.nav-cta {
+  background: var(--c-accent);
+  color: var(--c-ink);
+  padding: 9px 22px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  transition: opacity 0.2s, transform 0.15s;
+  border: none;
+  display: inline-block;
+}
+.nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* Hamburger */
+.nav-burger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  background: none; border: none;
+  padding: 4px;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--c-text); border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed; top: 64px; left: 0; right: 0; z-index: 190;
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+  padding: 24px 28px 32px;
+  flex-direction: column; gap: 20px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 18px; color: var(--c-muted-hi); font-weight: 600; }
+.mobile-menu a:hover { color: var(--c-text); }
+.mobile-menu .nav-cta { align-self: flex-start; margin-top: 8px; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  padding: 160px 28px 100px;
+  max-width: 1120px; margin: 0 auto;
+  position: relative;
+}
+
+/* Ambient glow behind hero */
+.hero::before {
+  content: '';
+  position: absolute; top: 80px; left: -100px;
+  width: 700px; height: 500px;
+  background: radial-gradient(ellipse at 30% 40%, rgba(200,255,0,0.055) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--c-accent-dim);
+  border: 1px solid rgba(200,255,0,0.22);
+  color: var(--c-accent);
+  font-family: var(--ff-mono);
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 100px;
+  margin-bottom: 36px;
+}
+.hero-tag-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--c-accent);
+  animation: blink 2.2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+.hero h1 {
+  font-size: clamp(48px, 7.5vw, 96px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.045em;
+  margin-bottom: 28px;
+  max-width: 880px;
+}
+.hero h1 em { font-style: normal; color: var(--c-accent); }
+
+.hero-sub {
+  font-size: clamp(17px, 1.8vw, 21px);
+  color: var(--c-muted-hi);
+  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 52px;
+}
+
+.hero-btns { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--c-accent);
+  color: var(--c-ink);
+  padding: 17px 38px;
+  border-radius: 10px;
+  font-weight: 900; font-size: 16px;
+  border: none;
+  display: inline-block;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 0 0 var(--c-accent-glow);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+  box-shadow: 0 8px 32px var(--c-accent-glow);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--c-muted-hi);
+  font-size: 14px;
+  border: 1px solid var(--c-border-md);
+  padding: 16px 28px;
+  border-radius: 10px;
+  display: inline-block;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--c-border-hi); color: var(--c-text); }
+
+.hero-stats {
+  display: flex; gap: 0;
+  margin-top: 88px;
+  padding-top: 52px;
+  border-top: 1px solid var(--c-border);
+  flex-wrap: wrap;
+}
+.hero-stat {
+  flex: 1; min-width: 160px;
+  padding-right: 40px;
+  border-right: 1px solid var(--c-border);
+  margin-bottom: 24px;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: var(--ff-mono);
+  font-size: clamp(30px, 3.5vw, 46px);
+  font-weight: 500;
+  color: var(--c-text);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.hero-stat-num em { font-style: normal; color: var(--c-accent); }
+.hero-stat-label {
+  font-size: 13px; color: var(--c-muted);
+  margin-top: 6px; line-height: 1.4;
+}
+
+/* ============================================================
+   SECTION: HOW IT WORKS
+   ============================================================ */
+.section-how { padding: 110px 28px; }
+.section-how .container {}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 64px;
+  background: var(--c-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.step {
+  background: var(--c-surface);
+  padding: 40px 32px;
+  transition: background 0.25s;
+  position: relative;
+}
+.step::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--c-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+}
+.step:hover { background: var(--c-surface-2); }
+.step:hover::after { transform: scaleX(1); }
+
+.step-num {
+  font-family: var(--ff-mono);
+  font-size: 11px; letter-spacing: 0.12em;
+  color: var(--c-accent);
+  margin-bottom: 22px;
+}
+.step-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--c-accent-dim);
+  border: 1px solid rgba(200,255,0,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 22px;
+}
+.step h3 {
+  font-size: 17px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.step p { font-size: 14px; color: var(--c-muted); line-height: 1.65; }
+
+/* ============================================================
+   SECTION: RATES
+   ============================================================ */
+.section-rates {
+  padding: 110px 28px;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.rates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+
+.rate-card {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  position: relative;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.rate-card:hover {
+  border-color: var(--c-border-hi);
+  transform: translateY(-5px);
+}
+.rate-card.featured {
+  border-color: rgba(200,255,0,0.30);
+  background: #0C1100;
+}
+.rate-card.featured:hover { border-color: rgba(200,255,0,0.55); }
+
+.rate-badge {
+  position: absolute; top: -13px; left: 24px;
+  background: var(--c-accent); color: var(--c-ink);
+  font-family: var(--ff-mono);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.10em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 100px;
+}
+
+.rate-bank {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--c-muted);
+  margin-bottom: 6px;
+}
+.rate-product {
+  font-size: 19px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+  line-height: 1.25;
+}
+
+.rate-amount {
+  font-family: var(--ff-mono);
+  font-size: 48px; font-weight: 500;
+  color: var(--c-accent);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.rate-amount-cur {
+  font-size: 20px; color: var(--c-muted);
+}
+
+.rate-desc {
+  font-size: 13px; color: var(--c-muted);
+  margin-top: 14px;
+  line-height: 1.6;
+  min-height: 52px;
+}
+
+.rate-divider {
+  height: 1px; background: var(--c-border);
+  margin: 20px 0;
+}
+
+.rate-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  background: rgba(255,255,255,0.05);
+  color: var(--c-muted);
+  font-size: 11px; font-weight: 500;
+  padding: 5px 12px; border-radius: 100px;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--c-border);
+}
+
+/* ============================================================
+   SECTION: CALCULATOR
+   ============================================================ */
+.section-calc { padding: 110px 28px; }
+
+.calc-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 64px;
+}
+
+.calc-controls { display: flex; flex-direction: column; gap: 36px; }
+
+.control-group {}
+.control-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 14px;
+}
+.control-header label {
+  font-size: 14px; color: var(--c-muted-hi);
+}
+.control-val {
+  font-family: var(--ff-mono);
+  font-size: 14px; font-weight: 500;
+  color: var(--c-accent);
+}
+
+/* Custom range */
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none; appearance: none;
+  height: 3px;
+  background: var(--c-border-md);
+  border-radius: 2px;
+  outline: none; cursor: pointer;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--c-accent);
+  border: 3px solid var(--c-bg);
+  box-shadow: 0 0 0 2px var(--c-accent);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"]::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--c-accent);
+  border: 3px solid var(--c-bg);
+  cursor: pointer;
+}
+
+.calc-results { display: flex; flex-direction: column; gap: 14px; }
+
+.result-main {
+  background: #0C1100;
+  border: 1px solid rgba(200,255,0,0.28);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+}
+.result-main-label {
+  font-size: 13px; color: var(--c-muted); margin-bottom: 10px;
+}
+.result-main-val {
+  font-family: var(--ff-mono);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500; color: var(--c-accent);
+  letter-spacing: -0.025em;
+  line-height: 1;
+}
+
+.result-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.result-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.result-card-label {
+  font-size: 12px; color: var(--c-muted);
+  margin-bottom: 8px;
+}
+.result-card-val {
+  font-family: var(--ff-mono);
+  font-size: 22px; font-weight: 500;
+  color: var(--c-text);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   SECTION: TRAFFIC
+   ============================================================ */
+.section-traffic { padding: 110px 28px; }
+
+.traffic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+
+.traffic-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: border-color 0.25s, transform 0.25s;
+}
+.traffic-card:hover {
+  border-color: var(--c-border-md);
+  transform: translateY(-3px);
+}
+
+.traffic-icon-wrap {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.traffic-card h4 {
+  font-size: 16px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.traffic-card p { font-size: 14px; color: var(--c-muted); line-height: 1.65; }
+
+.traffic-badge {
+  display: inline-block;
+  background: var(--c-accent-dim);
+  color: var(--c-accent);
+  font-family: var(--ff-mono);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+/* ============================================================
+   SECTION: WHY US
+   ============================================================ */
+.section-why {
+  padding: 110px 28px;
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+
+.why-card {
+  background: var(--c-bg);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  display: flex; gap: 24px; align-items: flex-start;
+  transition: border-color 0.25s;
+}
+.why-card:hover { border-color: var(--c-border-hi); }
+.why-num {
+  font-family: var(--ff-mono);
+  font-size: 36px; font-weight: 500;
+  color: var(--c-accent);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 52px;
+}
+.why-text h4 {
+  font-size: 17px; font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.why-text p { font-size: 14px; color: var(--c-muted); line-height: 1.65; }
+
+/* ============================================================
+   SECTION: CTA / FORM
+   ============================================================ */
+.section-cta {
+  padding: 110px 28px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.section-cta::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(200,255,0,0.055) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cta-title {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  max-width: 720px;
+  margin: 0 auto 24px;
+}
+.cta-title em { font-style: normal; color: var(--c-accent); }
+
+.cta-sub {
+  font-size: 18px;
+  color: var(--c-muted-hi);
+  max-width: 480px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+
+.cta-form {
+  display: flex; gap: 12px;
+  max-width: 500px; margin: 0 auto;
+  flex-wrap: wrap; justify-content: center;
+}
+
+.cta-input {
+  flex: 1; min-width: 220px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-md);
+  border-radius: 10px;
+  color: var(--c-text);
+  font-family: var(--ff);
+  font-size: 16px;
+  padding: 16px 20px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cta-input:focus {
+  border-color: rgba(200,255,0,0.45);
+  box-shadow: 0 0 0 3px rgba(200,255,0,0.10);
+}
+.cta-input::placeholder { color: var(--c-muted); }
+.cta-input.error { border-color: rgba(255,80,80,0.5); }
+
+.cta-note {
+  font-size: 13px; color: var(--c-muted);
+  margin-top: 18px;
+}
+
+.success-block {
+  display: none;
+  background: var(--c-accent-dim);
+  border: 1px solid rgba(200,255,0,0.28);
+  border-radius: 12px;
+  padding: 20px 32px;
+  color: var(--c-accent);
+  font-weight: 700; font-size: 16px;
+  max-width: 440px; margin: 0 auto;
+  text-align: center;
+}
+.success-block.show { display: block; }
+
+/* ============================================================
+   SECTION: FAQ
+   ============================================================ */
+.section-faq { padding: 110px 28px; }
+.section-faq .inner { max-width: 800px; margin: 0 auto; }
+
+.faq-list { margin-top: 56px; }
+
+.faq-item {
+  border-bottom: 1px solid var(--c-border);
+}
+.faq-btn {
+  width: 100%; background: none; border: none;
+  color: var(--c-text); font-family: var(--ff);
+  font-size: 16px; font-weight: 600;
+  text-align: left;
+  padding: 24px 0;
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 20px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.faq-btn:hover { color: var(--c-accent); }
+.faq-icon {
+  font-size: 20px; font-weight: 300;
+  color: var(--c-muted); flex-shrink: 0;
+  line-height: 1.3;
+  transition: transform 0.25s ease, color 0.2s;
+  display: block;
+}
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+  color: var(--c-accent);
+}
+.faq-answer {
+  display: none;
+  padding: 0 48px 24px 0;
+  font-size: 15px; color: var(--c-muted-hi);
+  line-height: 1.75;
+}
+.faq-item.open .faq-answer { display: block; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--c-border);
+  padding: 44px 28px;
+}
+.footer-inner {
+  max-width: 1120px; margin: 0 auto;
+  display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 20px;
+}
+.footer-logo {
+  font-size: 16px; font-weight: 900; letter-spacing: -0.04em;
+}
+.footer-logo em { font-style: normal; color: var(--c-accent); }
+.footer-copy { font-size: 13px; color: var(--c-muted); }
+.footer-links { display: flex; gap: 28px; }
+.footer-links a {
+  font-size: 13px; color: var(--c-muted);
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--c-text); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .rates-grid { grid-template-columns: repeat(2, 1fr); }
+  .traffic-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-cta.desktop { display: none; }
+  .nav-burger { display: flex; }
+
+  .hero { padding: 110px 20px 60px; }
+  .hero-stats { gap: 0; }
+  .hero-stat {
+    flex: none; width: 50%;
+    padding: 0 0 24px;
+    border-right: none;
+  }
+
+  .steps { grid-template-columns: 1fr; }
+  .rates-grid { grid-template-columns: 1fr; }
+  .calc-layout { grid-template-columns: 1fr; gap: 48px; }
+  .calc-results { order: -1; }
+  .traffic-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .result-row { grid-template-columns: 1fr; }
+
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .footer-links { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .section-title { font-size: 28px; }
+  .hero h1 { font-size: 40px; }
+  .hero-btns { flex-direction: column; align-items: flex-start; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+  .cta-form { flex-direction: column; }
+  .cta-input { min-width: 0; }
+  .btn-primary.submit { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<header>
+  <nav class="nav" aria-label="Основная навигация">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Партнёр<em>РКО</em></a>
+      <div class="nav-links" role="navigation">
+        <a href="#how">Как работает</a>
+        <a href="#rates">Ставки</a>
+        <a href="#calc">Калькулятор</a>
+        <a href="#traffic">Трафик</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <a href="#join" class="nav-cta desktop">Стать партнёром</a>
+      <button class="nav-burger" id="burger" aria-label="Меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Мобильное меню">
+    <a href="#how" class="mm-link">Как работает</a>
+    <a href="#rates" class="mm-link">Ставки</a>
+    <a href="#calc" class="mm-link">Калькулятор</a>
+    <a href="#traffic" class="mm-link">Трафик</a>
+    <a href="#faq" class="mm-link">FAQ</a>
+    <a href="#join" class="nav-cta">Стать партнёром</a>
+  </nav>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<main>
+<section class="hero" id="home" aria-label="Главный экран">
+  <div class="hero-tag">
+    <span class="hero-tag-dot" aria-hidden="true"></span>
+    Партнёрская программа активна
+  </div>
+  <h1 class="reveal">Приводи бизнес — получай до <em>8 000 ₽</em> за каждый счёт</h1>
+  <p class="hero-sub reveal reveal-d1">Партнёрская программа РКО с прямыми ставками от банков. Любой трафик. Выплаты за 48 часов. Без потолка.</p>
+  <div class="hero-btns reveal reveal-d2">
+    <a href="#join" class="btn-primary">Подключиться бесплатно</a>
+    <a href="#rates" class="btn-secondary">Смотреть ставки →</a>
+  </div>
+  <div class="hero-stats reveal reveal-d3" aria-label="Ключевые показатели">
+    <div class="hero-stat">
+      <div class="hero-stat-num"><em>₽</em>1 500 – 8 000</div>
+      <div class="hero-stat-label">выплата за одного клиента</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">14<em>+</em></div>
+      <div class="hero-stat-label">банков-партнёров</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">48<em>ч</em></div>
+      <div class="hero-stat-label">среднее время выплаты</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num"><em>0</em> ₽</div>
+      <div class="hero-stat-label">стоимость входа</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+<section class="section-how" id="how" aria-label="Как это работает">
+  <div class="container">
+    <p class="mono section-label reveal">// как это работает</p>
+    <h2 class="section-title reveal">Четыре шага до первой выплаты</h2>
+    <p class="section-sub reveal">Никакой бюрократии. Регистрируешься, получаешь ссылку, приводишь клиентов, получаешь деньги.</p>
+    <div class="steps" role="list">
+      <div class="step reveal" role="listitem">
+        <div class="step-num">01</div>
+        <div class="step-icon" aria-hidden="true">🔗</div>
+        <h3>Регистрация</h3>
+        <p>Заполняешь форму, получаешь личный кабинет и уникальные реферальные ссылки для каждого банка-партнёра.</p>
+      </div>
+      <div class="step reveal reveal-d1" role="listitem">
+        <div class="step-num">02</div>
+        <div class="step-icon" aria-hidden="true">🎯</div>
+        <h3>Трафик</h3>
+        <p>Размещаешь ссылки в своих каналах: сайт, Telegram, соцсети, контекст, e-mail — любой источник трафика.</p>
+      </div>
+      <div class="step reveal reveal-d2" role="listitem">
+        <div class="step-num">03</div>
+        <div class="step-icon" aria-hidden="true">✅</div>
+        <h3>Активация</h3>
+        <p>Клиент открывает счёт по твоей ссылке и совершает первую операцию. Лид засчитан — отслеживается автоматически.</p>
+      </div>
+      <div class="step reveal reveal-d3" role="listitem">
+        <div class="step-num">04</div>
+        <div class="step-icon" aria-hidden="true">💰</div>
+        <h3>Выплата</h3>
+        <p>Деньги на карту или расчётный счёт в течение 48 часов. Минимальная сумма для вывода — 500 ₽.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     RATES
+     ============================================================ -->
+<section class="section-rates" id="rates" aria-label="Партнёрские ставки">
+  <div class="container">
+    <p class="mono section-label reveal">// партнёрские ставки</p>
+    <h2 class="section-title reveal">Платим больше, чем CPA-сетки</h2>
+    <p class="section-sub reveal">Прямые договора с банками — никаких агрегаторов. Ты получаешь полную ставку без посредников.</p>
+    <div class="rates-grid" role="list">
+
+      <article class="rate-card featured reveal" role="listitem">
+        <div class="rate-badge">Топ ставка</div>
+        <div class="rate-bank">Сбербанк Бизнес</div>
+        <div class="rate-product">РКО + бизнес-карта</div>
+        <div class="rate-amount">8 000<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">За клиента с оборотом от 50 000 ₽ в первый месяц. Повышенная ставка для ИП и ООО.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">ИП</span><span class="tag">ООО</span><span class="tag">первая транзакция</span>
+        </div>
+      </article>
+
+      <article class="rate-card reveal reveal-d1" role="listitem">
+        <div class="rate-bank">Тинькофф Бизнес</div>
+        <div class="rate-product">Расчётный счёт РКО</div>
+        <div class="rate-amount">5 000<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">За активированный счёт с первым платежом. Высокая конверсия — онбординг без визита в офис.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">ИП</span><span class="tag">ООО</span><span class="tag">самозанятые</span>
+        </div>
+      </article>
+
+      <article class="rate-card reveal reveal-d2" role="listitem">
+        <div class="rate-bank">Альфа-Банк</div>
+        <div class="rate-product">Бизнес РКО + эквайринг</div>
+        <div class="rate-amount">4 500<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">Бонус +1 000 ₽ если клиент подключит эквайринг в течение 30 дней после открытия счёта.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">ООО</span><span class="tag">ИП</span><span class="tag">+ эквайринг</span>
+        </div>
+      </article>
+
+      <article class="rate-card reveal" role="listitem">
+        <div class="rate-bank">Точка Банк</div>
+        <div class="rate-product">Счёт для ИП и ООО</div>
+        <div class="rate-amount">3 500<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">Ультравысокая конверсия — регистрация онлайн за 5 минут. Хорошо закрывается на холодную аудиторию.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">ИП</span><span class="tag">ООО</span><span class="tag">высокий CR</span>
+        </div>
+      </article>
+
+      <article class="rate-card reveal reveal-d1" role="listitem">
+        <div class="rate-bank">ВТБ Бизнес</div>
+        <div class="rate-product">Пакет РКО Стартап</div>
+        <div class="rate-amount">4 000<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">Для новых ООО до 1 года. Хорошо конвертирует на аудиторию начинающих предпринимателей и стартапов.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">ООО</span><span class="tag">стартапы</span>
+        </div>
+      </article>
+
+      <article class="rate-card reveal reveal-d2" role="listitem">
+        <div class="rate-bank">Модульбанк</div>
+        <div class="rate-product">РКО для МСБ</div>
+        <div class="rate-amount">2 500<span class="rate-amount-cur">₽</span></div>
+        <div class="rate-desc">Самозанятые + ИП на упрощёнке. Низкий порог одобрения, широкая аудитория с хорошим охватом.</div>
+        <div class="rate-divider"></div>
+        <div class="rate-tags">
+          <span class="tag">самозанятые</span><span class="tag">ИП</span>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CALCULATOR
+     ============================================================ -->
+<section class="section-calc" id="calc" aria-label="Калькулятор дохода">
+  <div class="container">
+    <p class="mono section-label reveal">// калькулятор дохода</p>
+    <h2 class="section-title reveal">Посчитай свой доход</h2>
+    <p class="section-sub reveal">Двигай ползунки — смотри на реальные цифры своего будущего дохода.</p>
+
+    <div class="calc-layout">
+      <div class="calc-controls reveal">
+        <div class="control-group">
+          <div class="control-header">
+            <label for="r-leads">Лидов в месяц</label>
+            <span class="control-val" id="v-leads">50</span>
+          </div>
+          <input type="range" id="r-leads" min="5" max="500" step="5" value="50" aria-label="Количество лидов в месяц">
+        </div>
+        <div class="control-group">
+          <div class="control-header">
+            <label for="r-rate">Средняя ставка за лид</label>
+            <span class="control-val" id="v-rate">4 000 ₽</span>
+          </div>
+          <input type="range" id="r-rate" min="1500" max="8000" step="500" value="4000" aria-label="Средняя ставка за лид в рублях">
+        </div>
+        <div class="control-group">
+          <div class="control-header">
+            <label for="r-conv">Конверсия в активных</label>
+            <span class="control-val" id="v-conv">30%</span>
+          </div>
+          <input type="range" id="r-conv" min="5" max="60" step="5" value="30" aria-label="Конверсия трафика в процентах">
+        </div>
+      </div>
+
+      <div class="calc-results reveal reveal-d1">
+        <div class="result-main">
+          <div class="result-main-label">Доход в месяц</div>
+          <div class="result-main-val" id="r-monthly" aria-live="polite">60 000 ₽</div>
+        </div>
+        <div class="result-row">
+          <div class="result-card">
+            <div class="result-card-label">Доход в год</div>
+            <div class="result-card-val" id="r-yearly" aria-live="polite">720 000 ₽</div>
+          </div>
+          <div class="result-card">
+            <div class="result-card-label">Активных лидов</div>
+            <div class="result-card-val" id="r-active" aria-live="polite">15</div>
+          </div>
+        </div>
+        <div class="result-card">
+          <div class="result-card-label">За каждого активного клиента</div>
+          <div class="result-card-val" id="r-per" aria-live="polite">4 000 ₽</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRAFFIC SOURCES
+     ============================================================ -->
+<section class="section-traffic" id="traffic" aria-label="Источники трафика">
+  <div class="container">
+    <p class="mono section-label reveal">// источники трафика</p>
+    <h2 class="section-title reveal">Работаем с любым каналом</h2>
+    <p class="section-sub reveal">Мотивированный, контентный, контекстный — ограничений по источнику нет. Главное — результат.</p>
+    <div class="traffic-grid" role="list">
+
+      <article class="traffic-card reveal" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">📱</div>
+        <h4>Telegram / ВКонтакте</h4>
+        <p>Каналы о бизнесе, бухгалтерии, самозанятости — самый дешёвый CPL при правильной аудитории.</p>
+        <span class="traffic-badge">рекомендуем</span>
+      </article>
+
+      <article class="traffic-card reveal reveal-d1" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">🔍</div>
+        <h4>Контекстная реклама</h4>
+        <p>Яндекс Директ по коммерческим запросам: «открыть счёт для ИП», «РКО без комиссии», «лучший банк для бизнеса».</p>
+        <span class="traffic-badge">высокий CR</span>
+      </article>
+
+      <article class="traffic-card reveal reveal-d2" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">📝</div>
+        <h4>SEO + контент</h4>
+        <p>Статьи-сравнения банков, гайды для новых ИП и ООО. Пассивный долгосрочный трафик с высоким LTV.</p>
+        <span class="traffic-badge">пассивный</span>
+      </article>
+
+      <article class="traffic-card reveal" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">🎁</div>
+        <h4>Мотивированный трафик</h4>
+        <p>Офферы с бонусом за регистрацию — для аудиторий с высокой чувствительностью к выгоде и скидкам.</p>
+        <span class="traffic-badge">разрешено</span>
+      </article>
+
+      <article class="traffic-card reveal reveal-d1" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">📧</div>
+        <h4>Email-рассылки</h4>
+        <p>Базы предпринимателей, бухгалтеров, стартапов. Персонализированные офферы с высокой открываемостью.</p>
+      </article>
+
+      <article class="traffic-card reveal reveal-d2" role="listitem">
+        <div class="traffic-icon-wrap" aria-hidden="true">🤝</div>
+        <h4>Партнёрства</h4>
+        <p>Коллаборации с сервисами для бизнеса: онлайн-бухгалтерия, CRM, юридические и HR-сервисы.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY US
+     ============================================================ -->
+<section class="section-why" id="why" aria-label="Почему ПартнёрРКО">
+  <div class="container">
+    <p class="mono section-label reveal">// почему мы</p>
+    <h2 class="section-title reveal">Прямые условия без посредников</h2>
+    <p class="section-sub reveal">Мы работаем напрямую с банками и передаём максимальную ставку партнёру.</p>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="why-num">01</div>
+        <div class="why-text">
+          <h4>Прямые ставки от банков</h4>
+          <p>Никаких CPA-сеток и агрегаторов между тобой и банком. Получаешь полную ставку без скрытых удержаний.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-d1">
+        <div class="why-num">02</div>
+        <div class="why-text">
+          <h4>Выплаты без задержек</h4>
+          <p>48 часов с момента подтверждения активации. Прозрачная статистика в личном кабинете в реальном времени.</p>
+        </div>
+      </div>
+      <div class="why-card reveal">
+        <div class="why-num">03</div>
+        <div class="why-text">
+          <h4>Без потолка по заработку</h4>
+          <p>Партнёры с объёмом от 100 лидов в месяц получают доступ к повышенным ставкам. Рост объёма = рост ставки.</p>
+        </div>
+      </div>
+      <div class="why-card reveal reveal-d1">
+        <div class="why-num">04</div>
+        <div class="why-text">
+          <h4>Любая форма получения</h4>
+          <p>Физлицо как самозанятый, ИП по договору услуг или ООО — подберём удобную форму при регистрации.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA / FORM
+     ============================================================ -->
+<section class="section-cta" id="join" aria-label="Форма регистрации">
+  <p class="mono section-label reveal">// стать партнёром</p>
+  <h2 class="cta-title reveal">Начни зарабатывать <em>сегодня</em></h2>
+  <p class="cta-sub reveal">Оставь телефон — перезвоним в течение 2 часов, ответим на вопросы и подключим к программе.</p>
+
+  <div class="cta-form reveal" id="cta-form" role="form" aria-label="Форма заявки">
+    <input
+      type="tel"
+      class="cta-input"
+      id="phone"
+      placeholder="+7 (___) ___-__-__"
+      aria-label="Телефон для связи"
+      autocomplete="tel"
+    >
+    <button class="btn-primary submit" onclick="submitLead()" type="button" aria-label="Отправить заявку">
+      Получить доступ →
+    </button>
+  </div>
+  <p class="cta-note reveal">Регистрация бесплатна. Без ежемесячных взносов. Без обязательного объёма.</p>
+
+  <div class="success-block" id="success-block" role="alert" aria-live="assertive">
+    ✓ Заявка принята — перезвоним в течение 2 часов
+  </div>
+</section>
+
+<!-- ============================================================
+     FAQ
+     ============================================================ -->
+<section class="section-faq" id="faq" aria-label="Часто задаваемые вопросы">
+  <div class="inner">
+    <p class="mono section-label reveal">// частые вопросы</p>
+    <h2 class="section-title reveal">FAQ</h2>
+    <div class="faq-list" role="list">
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Как быстро приходят выплаты?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Выплаты обрабатываются в течение 48 часов с момента подтверждения активации клиента банком. Доступны переводы на карту физлица или расчётный счёт ИП/ООО. Минимальная сумма для вывода — 500 ₽. Статус каждого лида отображается в личном кабинете.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Как считается активация лида?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Лид считается активированным, когда клиент открыл счёт по твоей реферальной ссылке и провёл первую операцию — входящий или исходящий платёж. Точные условия для каждого банка указаны в личном кабинете партнёра.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Можно ли использовать мотивированный трафик?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Да, мотивированный трафик разрешён. Важно: вознаграждение клиенту не должно превышать 50% твоей партнёрской выплаты, и ты не должен обещать бонусы от имени банка. Если сомневаешься — уточни у менеджера до запуска кампании.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Нужно ли ИП или юрлицо для участия?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Нет. Физическое лицо может получать выплаты как самозанятый — это законно и удобно. Если у тебя есть ИП или ООО, заключим договор оказания услуг. Подходящую форму подберём при регистрации.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Есть ли ограничение по заработку?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Потолка нет. Ставки не снижаются при росте объёма — наоборот. Партнёры с более 100 активных лидов в месяц получают доступ к повышенным ставкам и персональному менеджеру.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Как долго действует атрибуция (куки)?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Атрибуция работает 30 дней с момента первого перехода по твоей ссылке. Если клиент вернулся через 25 дней и открыл счёт — лид будет засчитан тебе.
+        </div>
+      </div>
+
+      <div class="faq-item" role="listitem">
+        <button class="faq-btn" aria-expanded="false" onclick="toggleFaq(this)">
+          Когда можно вывести первые деньги?
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-answer" role="region">
+          Сразу после первого подтверждённого лида. Если сумма превышает 500 ₽ — запрашиваешь вывод в личном кабинете, и в течение 48 часов деньги поступают на твои реквизиты.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">Партнёр<em>РКО</em></a>
+    <p class="footer-copy">© 2025 ПартнёрРКО. Все права защищены.</p>
+    <nav class="footer-links" aria-label="Дополнительные ссылки">
+      <a href="#">Договор оферты</a>
+      <a href="#">Конфиденциальность</a>
+      <a href="#">Поддержка</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JS
+     ============================================================ -->
+<script defer>
+/* ---- Scroll Reveal ---- */
+(function () {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+/* ---- Mobile Menu ---- */
+(function () {
+  var burger = document.getElementById('burger');
+  var menu = document.getElementById('mobile-menu');
+  if (!burger || !menu) return;
+
+  burger.addEventListener('click', function () {
+    var isOpen = menu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    burger.setAttribute('aria-expanded', String(isOpen));
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  menu.querySelectorAll('.mm-link, .nav-cta').forEach(function (link) {
+    link.addEventListener('click', function () {
+      menu.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+})();
+
+/* ---- Calculator ---- */
+(function () {
+  var rLeads = document.getElementById('r-leads');
+  var rRate  = document.getElementById('r-rate');
+  var rConv  = document.getElementById('r-conv');
+  if (!rLeads) return;
+
+  function fmt(n) {
+    return Math.round(n).toLocaleString('ru-RU') + '\u00a0₽';
+  }
+
+  function update() {
+    var leads = parseInt(rLeads.value, 10);
+    var rate  = parseInt(rRate.value,  10);
+    var conv  = parseInt(rConv.value,  10);
+    var active  = Math.round(leads * conv / 100);
+    var monthly = active * rate;
+    var yearly  = monthly * 12;
+
+    document.getElementById('v-leads').textContent  = leads;
+    document.getElementById('v-rate').textContent   = fmt(rate);
+    document.getElementById('v-conv').textContent   = conv + '%';
+    document.getElementById('r-monthly').textContent = fmt(monthly);
+    document.getElementById('r-yearly').textContent  = fmt(yearly);
+    document.getElementById('r-active').textContent  = active;
+    document.getElementById('r-per').textContent     = fmt(rate);
+  }
+
+  rLeads.addEventListener('input', update);
+  rRate.addEventListener('input', update);
+  rConv.addEventListener('input', update);
+  update();
+})();
+
+/* ---- FAQ Accordion ---- */
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.toggle('open');
+  btn.setAttribute('aria-expanded', String(isOpen));
+}
+
+/* ---- Lead Form ---- */
+function submitLead() {
+  var phone = document.getElementById('phone');
+  var val = (phone.value || '').trim().replace(/\s/g, '');
+  if (val.length < 7) {
+    phone.classList.add('error');
+    phone.focus();
+    return;
+  }
+  phone.classList.remove('error');
+  document.getElementById('cta-form').style.display = 'none';
+  document.getElementById('success-block').classList.add('show');
+
+  /* 
+   * Здесь можно подключить реальную отправку, например через Formspree:
+   *
+   * fetch('https://formspree.io/f/YOUR_FORM_ID', {
+   *   method: 'POST',
+   *   headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+   *   body: JSON.stringify({ phone: phone.value })
+   * });
+   */
+}
+
+/* ---- Phone input: телефонная маска ---- */
+(function () {
+  var ph = document.getElementById('phone');
+  if (!ph) return;
+  ph.addEventListener('input', function (e) {
+    ph.classList.remove('error');
+    var v = ph.value.replace(/\D/g, '');
+    if (v.startsWith('8')) v = '7' + v.slice(1);
+    if (!v) { ph.value = ''; return; }
+    var out = '+7';
+    if (v.length > 1) out += ' (' + v.slice(1, 4);
+    if (v.length >= 4) out += ') ' + v.slice(4, 7);
+    if (v.length >= 7) out += '-' + v.slice(7, 9);
+    if (v.length >= 9) out += '-' + v.slice(9, 11);
+    ph.value = out;
+  });
+})();
+
+/* ---- Nav: sticky shadow on scroll ---- */
+(function () {
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  window.addEventListener('scroll', function () {
+    nav.style.background = window.scrollY > 10
+      ? 'rgba(10,10,10,0.95)'
+      : 'rgba(10,10,10,0.80)';
+  }, { passive: true });
+})();
+</script>
+
+</body>
+</html>
